@@ -3,7 +3,7 @@ import { ApolloProvider } from "react-apollo";
 
 import client from '../../graphql/client';
 
-import Home from '../home';
+import Notes from '../notes';
 
 // import Page from '../../elements/layout/page';
 // import Section, { SectionInner } from '../../elements/section';
@@ -12,7 +12,7 @@ class App extends Component {
   render() {
     return (
       <ApolloProvider client={client}>
-        <Home />
+        <Notes />
       </ApolloProvider>
     );
   }

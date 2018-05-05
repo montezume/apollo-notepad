@@ -2,13 +2,18 @@ import React from 'react';
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
 
+import Notes from '../notes';
+
 const Home = () => (
   <Query
     query={gql`
       {
         allUsers {
           id
-          name
+          name,
+          posts {
+            id, content
+          }
         }
       }
     `}
@@ -18,7 +23,7 @@ const Home = () => (
       if (error) return <p>Error :(</p>;
         console.log('data', data);
         return (
-          <div>ok</div>
+          <div><Notes /></div>
         )
     }}
   </Query>
