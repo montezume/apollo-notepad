@@ -6,27 +6,18 @@ import List from './list';
 import Loading from './loading';
 import Shell from './shell';
 
+import { getNotes } from '../../graphql/notes';
+
 const Notes = () => (
   <Query
-    query={gql`
-      {
-        allPosts {
-          id
-          content,
-          createdAt,
-          author {
-            id, name
-          }
-        }
-      }
-    `}
+    query={getNotes}
   >
     {({ loading, error, data }) => {
       if (loading) return <Loading />;
       if (error) return <p>Error :(</p>;
         return (
           <Shell>
-            <List items={data.allPosts} />
+            <List items={data.allNotes} />
           </Shell>
         );
     }}

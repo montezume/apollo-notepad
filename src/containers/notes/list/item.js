@@ -1,5 +1,8 @@
 import React from 'react';
+import { Mutation } from 'react-apollo';
 import styled from 'styled-components';
+
+import { deleteNote, getNotes } from '../../../graphql/notes';
 
 const StyledItem = styled.div`
   color: red;
@@ -31,14 +34,33 @@ const Content = styled.div`
 `;
 
 const Item = ({item, ...props}) => {
-  console.log(item.author.name[0]);
   return (
-    <StyledItem {...props}>
-      <Avatar letter={item.author.name[0]} />
-      <Content>
-        {item.content}
-      </Content>
-    </StyledItem>
+    <Mutation
+      mutation={deleteNote}
+      update={(cache, { data: { deleteNote } }) => {
+        const { allNotes } = cache.readQuery({ query: getNotes });
+        cache.writeQuery({
+          query: getNotes,
+          data: { allNotes: allNotes.filter(post => post.id !== deleteNote.id) }
+        });
+      }}
+      >
+      {deleteNote => (
+        <StyledItem {...props}>
+          <Avatar letter={item.author.name[0]} />
+          <Content>
+            {item.content}
+          </Content>
+          <button type="button" onClick={() => {
+            deleteNote({
+              variables: {
+                id: item.id
+              }
+            });
+          }}>Delete</button>
+        </StyledItem>
+      )}
+    </Mutation>
   );
 };
 
