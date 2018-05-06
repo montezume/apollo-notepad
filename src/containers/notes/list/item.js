@@ -33,6 +33,22 @@ const Content = styled.div`
   flex: 1;
 `;
 
+const ViewItem = ({item, deleteItem, ...props}) => (
+  <StyledItem {...props}>
+    <Avatar letter={item.author.name[0]} />
+    <Content>
+      {item.content}
+    </Content>
+    <button type="button" onClick={() => {
+      deleteItem({
+        variables: {
+          id: item.id
+        }
+      });
+    }}>Delete</button>
+  </StyledItem>
+);
+
 const Item = ({item, ...props}) => {
   return (
     <Mutation
@@ -46,19 +62,11 @@ const Item = ({item, ...props}) => {
       }}
       >
       {deleteNote => (
-        <StyledItem {...props}>
-          <Avatar letter={item.author.name[0]} />
-          <Content>
-            {item.content}
-          </Content>
-          <button type="button" onClick={() => {
-            deleteNote({
-              variables: {
-                id: item.id
-              }
-            });
-          }}>Delete</button>
-        </StyledItem>
+        <ViewItem
+          item={item}
+          deleteItem={deleteNote}
+          {...props}
+        />
       )}
     </Mutation>
   );
